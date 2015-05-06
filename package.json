@@ -1,0 +1,57 @@
+{
+  "name": "waterline-sails.io.js",
+  "version": "0.1.0",
+  "description": "sails.io.js adapter for Sails / Waterline when using Waterline on a client to communicate with a Sails server",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marnusw/waterline-sails.io.js.git"
+  },
+  "scripts": {
+    "test": "node runner.js"
+  },
+  "dependencies": {
+    "lodash": "~2.4.1",
+    "sails.io.js": "~0.11.5",
+    "socket.io-client": "~1.3.3",
+    "waterline-errors": "~0.10.1"
+  },
+  "devDependencies": {
+    "waterline-adapter-tests": "^0.10.10",
+    "mocha": "*",
+    "captains-log": "^0.11.0",
+    "sails": "^0.11.0",
+    "sails-memory": "^0.10.3"
+  },
+  "waterlineAdapter": {
+    "type": "sails.io.js",
+    "interfaces": [
+      "semantic",
+      "queryable",
+      "associations",
+      "subscribable"
+    ],
+    "waterlineVersion": "~0.10.0"
+  },
+  "author": "Marnus Weststrate <marnusw@gmail.com>",
+  "contributors": [],
+  "keywords": [
+    "sails.io.js",
+    "web sockets",
+    "isomorphic",
+    "adapter",
+    "sails",
+    "waterline",
+    "orm",
+    "sailsjs",
+    "sails.js"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/marnusw/waterline-sails.io.js/issues"
+  },
+  "homepage": "https://github.com/marnusw/waterline-sails.io.js",
+  "directories": {
+    "test": "test"
+  }
+}

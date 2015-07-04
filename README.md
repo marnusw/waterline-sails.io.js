@@ -1,135 +1,166 @@
-# waterline-sails.io.js-adapter
+# waterline-sails.io.js Adapter
 
-Provides easy access to `foo` from Sails.js & Waterline.
+This module is a [Waterline](https://github.com/balderdashy/waterline)/[Sails.js](https://github.com/balderdashy/sails) 
+adapter which provides easy access to a Sails server via the 
+[sails.io.js web-socket client](http://sailsjs.org/documentation/reference/web-sockets/socket-client), when
+Waterline is used on a client. It is designed to work with 
+[Sails Blueprint](http://sailsjs.org/documentation/reference/blueprint-api) routes so it can be used to hook up
+a client application to a Sails.js server right out the box. 
 
-This module is a Waterline/Sails adapter, an early implementation of a rapidly-developing, tool-agnostic data standard.  Its goal is to provide a set of declarative interfaces, conventions, and best-practices for integrating with all sorts of data sources.  Not just databases-- external APIs, proprietary web services, or even hardware.
-
-Strict adherence to an adapter specification enables the (re)use of built-in generic test suites, standardized documentation, reasonable expectations around the API for your users, and overall, a more pleasant development experience for everyone.
-
+This adapter is particularly useful when creating isomorphic applications where records must be retrieved on the
+client or server in a consistent manner. On the server the models can be configured to use the adapters of the 
+underlying persistence layer/services, and when passing the model config to the client the connection details
+can be updated to use this `sails.io.js` adapter instead.
+ 
 
 ### Installation
 
-To install this adapter, run:
+Install via NPM:
 
 ```sh
-$ npm install waterline-foo
+$ npm install waterline-sails.io.js
 ```
 
 
+### Configure
+
+Add the sails.io.js adapter config to the config/connections.js file. Available options and defaults:
+
+```javascript
+module.exports.connections = {
+  sailsSocketClient: {
+    adapter: 'waterline-sails.io.js',
+    protocol: 'http',   // HTTP protocol (http | https)
+    host: 'localhost',  // api host name
+    port: 1337,         // api port
+    pathname: '/api',   // base api path
+    simulateDelay: 0    // Simulated delay ms
+  }
+};
+```
+
+You will have to update the `connection` property on the definitions of the models that will be used
+on the client so it uses the `sailsSocketConnection` rather than the connection specified on the server.
+
+See the documentation of 
+[fluxible-plugin-waterline-models](https://github.com/marnusw/fluxible-plugin-waterline-models#use-with-sailsjs)
+for an example of how this might be configured.
+
+
+### Interfaces and Features
+
+The following 
+[**Interfaces**](https://github.com/balderdashy/sails-docs/blob/master/contributing/adapter-specification.md) are 
+supported:
+
+* Semantic
+* Queryable
+
+The `.populate()` method without criteria, i.e. calling `Model.populate('attrName')`, is allowed, but with
+`Model.populate('attrName', {criteria})` the criteria will be ignored. All attributes passed on successive
+calls to `.populate()` will be passed to the server on the `populate` property of the query. This means
+that if [Sails Blueprints](http://sailsjs.org/documentation/reference/blueprint-api) are used this will 
+work straight out of the box.
+
+The supported **Features** will depend on the underlying storage mechanism used on the server, but in 
+principle the following features may be supported:
+
+* `crossAdapter` (queries across this and other adapters will be joined in-memory on the client)
+* `autoIncrement`(`.sequential`)
+* `unique`
 
 
 ### Usage
 
-This adapter exposes the following methods:
+This adapter exposes the standard `find()`, `create()`, `update()` and `destroy()` methods and other 
+combinations of the *Semantic Interface* and can be used on the client just like any of the core adapters 
+would be on the server, making this adapter an attractive choice for isomorphic applications. 
+Sails Blueprints does not support the `findAndUpdate()` or `findAndDestroy()` methods, but this 
+[semantic-blueprints hook](https://github.com/marnusw/sails-hook-semantic-blueprints) can be used to 
+extend your app with those.
 
-###### `find()`
+As always the `.exec()` method will return an error object or the results, or the promise api can be used.
 
-+ **Status**
-  + Planned
+##### `sailsIoSocket()` Method
 
-###### `create()`
-
-+ **Status**
-  + Planned
-
-###### `update()`
-
-+ **Status**
-  + Implemented
-
-###### `destroy()`
-
-+ **Status**
-  + Planned
-
-
-
-### Interfaces
-
->TODO:
->Specify the interfaces this adapter will support.
->e.g. `This adapter implements the [semantic]() and [queryable]() interfaces.`
-> For more information, check out this repository's [FAQ](./FAQ.md) and the [adapter interface reference](https://github.com/balderdashy/sails-docs/blob/master/adapter-specification.md) in the Sails docs.
-
-
-### Development
-
-Check out **Connections** in the Sails docs, or see the `config/connections.js` file in a new Sails project for information on setting up adapters.
-
-## Getting started
-It's usually pretty easy to add your own adapters for integrating with proprietary systems or existing open APIs.  For most things, it's as easy as `require('some-module')` and mapping the appropriate methods to match waterline semantics.  To get started:
-
-1. Fork this repository
-2. Set up your `README.md` and `package.json` file.  Sails.js adapter module names are of the form sails-*, where * is the name of the datastore or service you're integrating with.
-3. Build your adapter.
-
-
-
-
-### Running the tests
-
-Configure the interfaces you plan to support (and targeted version of Sails/Waterline) in the adapter's `package.json` file:
+The adapter also exposes a `sailsIoSocket()` method on the Model which serves the same purpose as the 
+`.native()` and `.query()` methods on the MongoDB and SQL adapters respectively. It can be used to run 
+one of the `sails.io.js` methods against the actual underlying socket. 
 
 ```javascript
-{
-  //...
-  "sails": {
-  	"adapter": {
-	    "sailsVersion": "~0.10.0",
-	    "implements": [
-	      "semantic",
-	      "queryable"
-	    ]
-	  }
-  }
-}
+Model.sailsIoSocket(method, url, data, function(err, body, jwres) {...});
 ```
 
-In your adapter's directory, run:
+The first parameter is the `sails.io.js` method to call, with subsequent parameters being passed as the 
+arguments. The data parameter is optional, and the callback should always be the last argument provided.
 
-```sh
-$ npm test
+The only difference compared to using the socket methods directly is the signature of the callback. The 
+first parameter is a possible error object (see below), the response body is on the second parameter 
+for successful requests, and the untouched `jwres` object is always provided on the third parameter for 
+more specialised use cases. 
+
+##### Error Objects
+
+If a web socket request responds with an error an error-object is returned as the first argument of
+the callback.
+
+For a 400 status code (validation errors) the object has the form:
+
+```javascript
+    {
+      statusCode: 400,
+      type: 'E_VALIDATION',
+      validation: true,
+      messages: jwres.body
+    }
+```
+
+For a 401 status code (unauthorized) the object has the form:
+
+```javascript
+    {
+      statusCode: 401,
+      type: 'E_UNAUTHORIZED',
+      unauthorized: true,
+      validation: true,
+      messages: jwres.body
+    }
+```
+
+For a 404 status code (not found) the object has the form:
+
+```javascript
+    {
+      statusCode: 404,
+      type: 'E_NOT_FOUND',
+      notFound: true,
+      messages: jwres.body
+    }
+```
+
+For all other status codes the object has the form:
+
+```javascript
+    {
+      statusCode: <code>,
+      type: 'E_FATAL',
+      fatal: true,
+      message: jwres.body
+    }
 ```
 
 
-## Publish your adapter
+### Tests
 
-> You're welcome to write proprietary adapters and use them any way you wish--
-> these instructions are for releasing an open-source adapter.
-
-1. Create a [new public repo](https://github.com/new) and add it as a remote (`git remote add origin git@github.com:yourusername/sails-youradaptername.git)
-2. Make sure you attribute yourself as the author and set the license in the package.json to "MIT".
-3. Run the tests one last time.
-4. Do a [pull request to sails-docs](https://github.com/balderdashy/sails-docs/compare/) adding your repo to `data/adapters.js`.  Please let us know about any special instructions for usage/testing.
-5. We'll update the documentation with information about your new adapter
-6. Then everyone will adore you with lavish praises.  Mike might even send you jelly beans.
-
-7. Run `npm version patch`
-8. Run `git push && git push --tags`
-9. Run `npm publish`
+No tests yet. The [Waterline-adapter-tests](https://github.com/balderdashy/waterline-adapter-tests) should be run.
 
 
+## Contributing
 
-
-### Questions?
-
-See [`FAQ.md`](./FAQ.md).
-
-
-
-### More Resources
-
-- [Stackoverflow](http://stackoverflow.com/questions/tagged/sails.js)
-- [#sailsjs on Freenode](http://webchat.freenode.net/) (IRC channel)
-- [Twitter](https://twitter.com/sailsjs)
-- [Professional/enterprise](https://github.com/balderdashy/sails-docs/blob/master/FAQ.md#are-there-professional-support-options)
-- [Tutorials](https://github.com/balderdashy/sails-docs/blob/master/FAQ.md#where-do-i-get-help)
-- <a href="http://sailsjs.org" target="_blank" title="Node.js framework for building realtime APIs."><img src="https://github-camo.global.ssl.fastly.net/9e49073459ed4e0e2687b80eaf515d87b0da4a6b/687474703a2f2f62616c64657264617368792e6769746875622e696f2f7361696c732f696d616765732f6c6f676f2e706e67" width=60 alt="Sails.js logo (small)"/></a>
+Comments and/or pull requests are welcome.
 
 
 ## License
 
 This software is free to use under the MIT license.
-See the [LICENSE file][] for license text and copyright information.
-
-[LICENSE file]: https://github.com/marnusw/fluxible-plugin-waterline-models/blob/master/LICENSE.md
+See the [LICENSE file](LICENSE.md) for license text and copyright information.

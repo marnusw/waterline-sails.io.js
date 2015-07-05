@@ -1,3 +1,9 @@
+### Master
+
+* [FEATURE] Added the `autoConnect` config option rather than forcing eager connection.
+* [DOCUMENTATION] Fix - `crossAdapter` feature is planned, not implemented.
+* [DOCUMENTATION] Document the `simulateDelay` config option.
+
 ### 0.4.0 (4 July 2015)
 
 * [DOCUMENTATION] Wrote up the main README.md documentation. 

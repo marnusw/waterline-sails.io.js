@@ -34,6 +34,7 @@ module.exports.connections = {
     host: 'localhost',  // api host name
     port: 1337,         // api port
     pathname: '/api',   // base api path
+    autoConnect: true,  // eager/lazy connect the web-socket
     simulateDelay: 0    // Simulated delay ms
   }
 };

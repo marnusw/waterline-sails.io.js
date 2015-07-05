@@ -46,6 +46,13 @@ See the documentation of
 [fluxible-plugin-waterline-models](https://github.com/marnusw/fluxible-plugin-waterline-models#use-with-sailsjs)
 for an example of how this might be configured.
 
+##### Simulated Response Delay
+
+Since the adapter will be used on a client it may at times be convenient to simulate the delay of a 
+server round trip while developing on a local server. By specifying the `simulateDelay` option in 
+milliseconds on the config object all requests will be delayed by that amount of time. This feature 
+is automatically disabled and removed from a production build.
+
 
 ### Interfaces and Features
 

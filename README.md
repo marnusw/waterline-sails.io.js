@@ -72,9 +72,14 @@ work straight out of the box.
 The supported **Features** will depend on the underlying storage mechanism used on the server, but in 
 principle the following features may be supported:
 
-* `crossAdapter` (queries across this and other adapters will be joined in-memory on the client)
 * `autoIncrement`(`.sequential`)
 * `unique`
+
+**Planned Features**
+
+* `crossAdapter` (queries across this and other adapters will be joined in-memory on the client)
+
+At present this is not implemented and only joins via a single connection using this adapter is supported.
 
 
 ### Usage

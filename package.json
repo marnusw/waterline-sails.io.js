@@ -43,7 +43,6 @@
       "queryable"
     ],
     "features": [
-      "cross-adapter",
       "unique",
       "autoIncrement.sequential"
     ]

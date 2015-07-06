@@ -1,6 +1,6 @@
 {
   "name": "waterline-sails.io.js",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "sails.io.js adapter for Sails / Waterline when using Waterline on a client to communicate with a Sails server",
   "main": "index.js",
   "scripts": {

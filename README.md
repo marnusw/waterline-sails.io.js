@@ -50,9 +50,11 @@ for an example of how this might be configured.
 ##### Request URLs
 
 The request URLs match the [Sails Blueprints](http://sailsjs.org/documentation/reference/blueprint-api) specification;
-that is: `REST_METHOD <protocol>://<host>:<port><basePath>/<model|collectionName>[/:id]`
+that is: 
 
-There are two exceptions to this rule; see the [#usage](usage) section.
+`REST_METHOD <protocol>://<host>:<port><basePath>/<model|collectionName>[/:id]`
+
+There are two exceptions to this rule; see the [usage](#usage) section.
 
 ##### Simulated Response Delay
 
@@ -122,51 +124,53 @@ more specialised use cases.
 ##### Error Objects
 
 If a web socket request responds with an error an error-object is returned as the first argument of
-the callback.
+the callback. This will be a `WLError` instance created by Waterline, the error objects below will 
+be on the `originalError` property. The exception is native calls to `sailsIoSocket()`, where these
+objects are returned directly.
 
 For a 400 status code (validation errors) the object has the form:
 
 ```javascript
-    {
-      statusCode: 400,
-      type: 'E_VALIDATION',
-      validation: true,
-      messages: jwres.body
-    }
+  {
+    statusCode: 400,
+    type: 'E_VALIDATION',
+    validation: true,
+    messages: jwres.body
+  }
 ```
 
 For a 401 status code (unauthorized) the object has the form:
 
 ```javascript
-    {
-      statusCode: 401,
-      type: 'E_UNAUTHORIZED',
-      unauthorized: true,
-      validation: true,
-      messages: jwres.body
-    }
+  {
+    statusCode: 401,
+    type: 'E_UNAUTHORIZED',
+    unauthorized: true,
+    validation: true,
+    messages: jwres.body
+  }
 ```
 
 For a 404 status code (not found) the object has the form:
 
 ```javascript
-    {
-      statusCode: 404,
-      type: 'E_NOT_FOUND',
-      notFound: true,
-      messages: jwres.body
-    }
+  {
+    statusCode: 404,
+    type: 'E_NOT_FOUND',
+    notFound: true,
+    messages: jwres.body
+  }
 ```
 
 For all other status codes the object has the form:
 
 ```javascript
-    {
-      statusCode: <code>,
-      type: 'E_FATAL',
-      fatal: true,
-      message: jwres.body
-    }
+  {
+    statusCode: <code>,
+    type: 'E_FATAL',
+    fatal: true,
+    message: jwres.body
+  }
 ```
 
 

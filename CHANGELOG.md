@@ -1,5 +1,6 @@
 ### 0.5.0 (6 July 2015)
 
+* [DOCUMENTATION] Include a note on WLErrors wrapping the error objects.
 * [ENHANCEMENT] Removed the dependency on `waterline-errors`.
 * [ENHANCEMENT] Cleaned up the codebase significantly.
 * [FEATURE] Renamed the `pathname` config option to `basePath`.

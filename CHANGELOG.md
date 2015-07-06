@@ -1,5 +1,6 @@
 ### 0.5.0 (6 July 2015)
 
+* [ENHANCEMENT] Removed the dependency on `waterline-errors`.
 * [ENHANCEMENT] Cleaned up the codebase significantly.
 * [FEATURE] Renamed the `pathname` config option to `basePath`.
 * [FEATURE] Added the `autoConnect` config option rather than forcing eager connection.

@@ -1,7 +1,9 @@
-### Master
+### 0.5.0 (6 July 2015)
 
+* [ENHANCEMENT] Cleaned up the codebase significantly.
+* [FEATURE] Renamed the `pathname` config option to `basePath`.
 * [FEATURE] Added the `autoConnect` config option rather than forcing eager connection.
-* [DOCUMENTATION] Fix - `crossAdapter` feature is planned, not implemented.
+* [DOCUMENTATION] Fix: `crossAdapter` feature is planned, not implemented.
 * [DOCUMENTATION] Document the `simulateDelay` config option.
 
 ### 0.4.0 (4 July 2015)

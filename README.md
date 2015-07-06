@@ -33,7 +33,7 @@ module.exports.connections = {
     protocol: 'http',   // HTTP protocol (http | https)
     host: 'localhost',  // api host name
     port: 1337,         // api port
-    pathname: '/api',   // base api path
+    basePath: '/api',   // base api path
     autoConnect: true,  // eager/lazy connect the web-socket
     simulateDelay: 0    // Simulated delay ms
   }
@@ -46,6 +46,13 @@ on the client so it uses the `sailsSocketConnection` rather than the connection 
 See the documentation of 
 [fluxible-plugin-waterline-models](https://github.com/marnusw/fluxible-plugin-waterline-models#use-with-sailsjs)
 for an example of how this might be configured.
+
+##### Request URLs
+
+The request URLs match the [Sails Blueprints](http://sailsjs.org/documentation/reference/blueprint-api) specification;
+that is: `REST_METHOD <protocol>://<host>:<port><basePath>/<model|collectionName>[/:id]`
+
+There are two exceptions to this rule; see the [#usage](usage) section.
 
 ##### Simulated Response Delay
 

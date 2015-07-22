@@ -1,3 +1,7 @@
+### Master
+
+* [BUGFIX] Direct access to sails.io.js via `Model.sailsIoSocket()` honours `simulateDelay`.
+
 ### 0.5.0 (6 July 2015)
 
 * [DOCUMENTATION] Include a note on WLErrors wrapping the error objects.
@@ -21,7 +25,7 @@
 
 ### 0.3.0 (2 June 2015)
 
-* [FEATURE] Direct access to sails.io.js methods via the Model.sailsIoSocket() method.
+* [FEATURE] Direct access to sails.io.js methods via the `Model.sailsIoSocket()` method.
 * [FEATURE] Pass back proper E_UNAUTHORIZED error on 401's rather than a fatal error. 
 
 ### 0.2.0 (25 May 2015)

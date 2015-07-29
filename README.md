@@ -111,10 +111,22 @@ one of the `sails.io.js` methods against the actual underlying socket.
 
 ```javascript
 Model.sailsIoSocket(method, url, data, function(err, body, jwres) {...});
+
+// OR
+
+Model.sailsIoSocket(method, url, data).then(body => {...}).catch(err => {...});
 ```
 
 The first parameter is the `sails.io.js` method to call, with subsequent parameters being passed as the 
 arguments. The data parameter is optional, and the callback should always be the last argument provided.
+If the callback is omitted a promise will be returned. In this case it is not possible to gain access to 
+the raw `jwres` object.
+
+*Note:* When a callback is not provided a global `Promise` class is assumed, meaning this case must either 
+be in an environment which supports ES6 features or be polyfilled. Including the 
+[Babel polyfill](https://babeljs.io/docs/usage/polyfill/), 
+[es6-promise](https://www.npmjs.com/package/es6-promise) or any other polyfill with the ES6 API will work.
+If callbacks are used throughout it is not necessary to add a promise polyfill.
 
 The only difference compared to using the socket methods directly is the signature of the callback. The 
 first parameter is a possible error object (see below), the response body is on the second parameter 
@@ -137,14 +149,24 @@ var options = {
 
 // Then do either
 
-Model.addTo(options, function(err, body, jwres) {...});
+Model.addTo(options, function(err, primaryRecordData, jwres) {...});
+Model.addTo(options).then(primaryRecordData => {...}).catch(err => {...});
 
 // or
 
-Model.removeFrom(options, function(err, body, jwres) {...});
+Model.removeFrom(options, function(err, primaryRecordData, jwres) {...});
+Model.removeFrom(options).then(primaryRecordData => {...}).catch(err => {...});
 ```
 
-See the Sails documentation for further details.
+In both cases the `primaryRecordData` is the data of the record added to, with all records on the
+relevant association populated. Because these are not native Sails.js methods, however, this is
+only the record data and not a Waterline record instance.
+
+*Note:* When a callback is not provided a global `Promise` class is assumed, meaning this case must either 
+be in an environment which supports ES6 features or be polyfilled. Including the 
+[Babel polyfill](https://babeljs.io/docs/usage/polyfill/), 
+[es6-promise](https://www.npmjs.com/package/es6-promise) or any other polyfill with the ES6 API will work.
+If callbacks are used throughout it is not necessary to add a promise polyfill.
 
 ##### Error Objects
 

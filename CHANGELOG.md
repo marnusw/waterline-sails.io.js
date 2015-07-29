@@ -1,5 +1,6 @@
-### Master
+### 0.5.1 (29 July 2015)
 
+* [FEATURE] Direct access to sails.io.js via `Model.sailsIoSocket()` supports the promise api.
 * [FEATURE] Added `addTo()` and `removeFrom()` methods for gaining access to the Blueprints add to/remove from actions.
 * [ENHANCEMENT] Direct access to sails.io.js via `Model.sailsIoSocket()` forces the `method` to lower case.
 * [BUGFIX] Direct access to sails.io.js via `Model.sailsIoSocket()` honours `simulateDelay`.

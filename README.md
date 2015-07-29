@@ -121,6 +121,31 @@ first parameter is a possible error object (see below), the response body is on 
 for successful requests, and the untouched `jwres` object is always provided on the third parameter for 
 more specialised use cases. 
 
+##### `addTo()` and `removeFrom()` Methods
+
+The adapter also exposes `addTo()` and `removeFrom()` methods on the Model for gaining access to the
+Blueprints [Add to Collection](http://sailsjs.org/documentation/reference/blueprint-api/add-to) and
+[Remove from Collection](http://sailsjs.org/documentation/reference/blueprint-api/remove-from) actions.
+
+```javascript
+var options = {
+  id: 1,                    // The primary record to update.
+  association: 'attrName',  // The association attribute.
+  foreignId: 3,             // The id of an existing record to add onto/remove from the association, OR
+  foreignData: {...}        // Data to create a new record to add onto/remove from the association.
+};
+
+// Then do either
+
+Model.addTo(options, function(err, body, jwres) {...});
+
+// or
+
+Model.removeFrom(options, function(err, body, jwres) {...});
+```
+
+See the Sails documentation for further details.
+
 ##### Error Objects
 
 If a web socket request responds with an error an error-object is returned as the first argument of

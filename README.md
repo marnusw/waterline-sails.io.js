@@ -144,7 +144,7 @@ var options = {
   id: 1,                    // The primary record to update.
   association: 'attrName',  // The association attribute.
   foreignId: 3,             // The id of an existing record to add onto/remove from the association, OR
-  foreignData: {...}        // Data to create a new record to add onto/remove from the association.
+  foreignData: {...}        // Data to create a new record to add onto the association.
 };
 
 // Then do either
@@ -158,9 +158,9 @@ Model.removeFrom(options, function(err, primaryRecordData, jwres) {...});
 Model.removeFrom(options).then(primaryRecordData => {...}).catch(err => {...});
 ```
 
-In both cases the `primaryRecordData` is the data of the record added to, with all records on the
-relevant association populated. Because these are not native Sails.js methods, however, this is
-only the record data and not a Waterline record instance.
+In both cases the `primaryRecordData` is the data of the record that was added to or removed from, 
+with all records on the relevant association populated. Because these are not native Sails.js methods, 
+however, this is only the record data and not a Waterline record instance.
 
 *Note:* When a callback is not provided a global `Promise` class is assumed, meaning this case must either 
 be in an environment which supports ES6 features or be polyfilled. Including the 
@@ -172,8 +172,8 @@ If callbacks are used throughout it is not necessary to add a promise polyfill.
 
 If a web socket request responds with an error an error-object is returned as the first argument of
 the callback. This will be a `WLError` instance created by Waterline, the error objects below will 
-be on the `originalError` property. The exception is native calls to `sailsIoSocket()`, where these
-objects are returned directly.
+be on the `originalError` property. The exception is methods not native to Waterline adapters: For 
+calls to `sailsIoSocket()`, `addTo()` and `removeFrom()` these objects are returned directly.
 
 For a 400 status code (validation errors) the object has the form:
 
